@@ -1,7 +1,7 @@
 import java.io.File;
 
 public class FileManager {
-    private final File file;
+    private File file;
 
     public FileManager(String directory) {
         this.file = new File(directory);
@@ -15,7 +15,7 @@ public class FileManager {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
         if (args.length > 1) {
             System.out.println("Invalid input");
             System.exit(0);
@@ -23,7 +23,7 @@ public class FileManager {
 
         FileManager fm;
         if (args.length == 0) {
-            fm = new FileManager("/");
+            fm = new FileManager(System.getProperty("user.home"));
         } else {
             fm = new FileManager(args[0]);
         }
