@@ -22,6 +22,7 @@ The program will then wait for user input:
 - `h` will move to the parent directory
 - `~` will move to the user's home directory
 - `q` will end the program
+- `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
 To clean up artifacts created by a maven build:
 

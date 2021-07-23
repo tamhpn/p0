@@ -2,25 +2,35 @@ package com.github.tamhpn.app;
 
 import java.io.File;
 import java.util.Scanner;
+import java.util.Arrays;
 
 public class FileMan {
     private File file;
-    private File[] subFiles;
+    private File[] allSubFiles;
+    private File[] visibleSubFiles;
     private boolean showHidden = false;
 
     public FileMan(String path) {
+        this.changeDirectory(path);
+        this.run();
+    }
+
+    private void changeDirectory(String path) {
         this.file = new File(path);
-        this.subFiles = this.file.listFiles();
+        this.allSubFiles = this.file.listFiles();
+        this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(File[]::new);
     }
 
     private void printFiles() {
-        assert this.subFiles != null;
         System.out.print("\033[H\033[2J");
-        for (File file : this.subFiles) {
-            if (file.isHidden() && showHidden) {
-                System.out.println(file.getName());
-            } else if (!file.isHidden()) {
-                System.out.println(file.getName());
+        int counter = 0;
+        if (showHidden) {
+            for (File file : this.allSubFiles) {
+                System.out.println(counter++ + ". " + file.getName());
+            }
+        } else {
+            for (File file : this.visibleSubFiles) {
+                System.out.println(counter++ + ". " + file.getName());
             }
         }
     }
@@ -28,36 +38,45 @@ public class FileMan {
     private void getInput() {
         Scanner scan = new Scanner(System.in);
         String input = scan.nextLine();
-        switch(input) {
-            case ".":
-                this.showHidden = !this.showHidden;
-                break;
-            case "~":
-                this.changeDirectory(System.getProperty("user.home"));
-                break;
-            case "h":
-                if (file.getParent() != null) {
-                    this.changeDirectory(file.getParent());
-                }
-                break;
-            case "q":
-                System.exit(0);
-            default:
-                break;
+        if (isInteger(input)) {
+            File f = showHidden ? this.allSubFiles[Integer.parseInt(input)] : this.visibleSubFiles[Integer.parseInt(input)];
+            if (f.isDirectory()) {
+                changeDirectory(f.toString());
+            }
+        } else {
+            switch(input) {
+                case ".":
+                    this.showHidden = !this.showHidden;
+                    break;
+                case "~":
+                    this.changeDirectory(System.getProperty("user.home"));
+                    break;
+                case "h":
+                    if (this.file.getParent() != null) {
+                        this.changeDirectory(this.file.getParent());
+                    }
+                    break;
+                case "q":
+                    System.exit(0);
+                default:
+                    break;
+            }
         }
-        scan.close();
     }
 
-    private void changeDirectory(String path) {
-        this.file = new File(path);
-        this.subFiles = this.file.listFiles();
+    private boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+            return true;
+        } catch (NumberFormatException err) {
+            return false;
+        }
     }
 
     public void run() {
-        this.printFiles();
         while (true) {
-            this.getInput();
             this.printFiles();
+            this.getInput();
         }
     }
 
@@ -73,6 +92,5 @@ public class FileMan {
         } else {
             fm = new FileMan(args[0]);
         }
-        fm.run();
     }
 }
