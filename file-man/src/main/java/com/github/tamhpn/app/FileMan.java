@@ -1,3 +1,5 @@
+package com.github.tamhpn.app;
+
 import java.io.File;
 import java.util.Scanner;
 
@@ -43,6 +45,7 @@ public class FileMan {
             default:
                 break;
         }
+        scan.close();
     }
 
     private void changeDirectory(String path) {
