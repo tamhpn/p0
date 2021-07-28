@@ -23,3 +23,15 @@ The program will then wait for user input:
 To clean up artifacts created by a maven build:
 
 `mvn clean`
+
+## Todo
+- Compressing files
+- Renaming files
+- Moving files
+- Copying files
+- Deleting files
+- Creating files
+- Opening files
+- Unit tests
+- Logging
+- Cover edge causes causing program to crash
