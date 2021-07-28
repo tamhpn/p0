@@ -79,16 +79,6 @@ public class FileMan {
     }
 
     public static void main(String[] args) {
-        if (args.length > 1) {
-            System.out.println("Invalid input");
-            System.exit(0);
-        }
-
-        FileMan fm;
-        if (args.length == 0) {
-            fm = new FileMan(System.getProperty("user.home"));
-        } else {
-            fm = new FileMan(args[0]);
-        }
-    }
+       FileMan fm = new FileMan(System.getProperty("user.home"));
+   }
 }

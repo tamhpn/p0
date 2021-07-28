@@ -11,11 +11,7 @@ Run:
 
 `mvn exec:java -Dexec.mainClass="FileMan"`
 
-will print the files and folders in the given directory to Standard Output. If no directory is given, the home directory is used ($HOME).
-
-A command line argument can be given using:
-
-`mvn exec:java -Dexec.mainClass="FileMan" -Dexec.args="arg0"`
+will print the files and folders in the home directory ($HOME) to Standard Output.
 
 The program will then wait for user input:
 - `.` will toggle hidden folder view
