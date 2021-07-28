@@ -32,6 +32,7 @@ To clean up artifacts created by a maven build:
 - Deleting files
 - Creating files
 - Opening files
+- Displaying files in sorted order
 - Unit tests
 - Logging
 - Cover edge causes causing program to crash
