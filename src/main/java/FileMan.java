@@ -1,5 +1,3 @@
-package com.github.tamhpn.app;
-
 import java.io.File;
 import java.util.Scanner;
 import java.util.Arrays;
