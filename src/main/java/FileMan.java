@@ -49,6 +49,11 @@ public class FileMan {
                 case "~":
                     this.changeDirectory(System.getProperty("user.home"));
                     break;
+                case "b":
+                    if (this.file.getParent() != null) {
+                        this.changeDirectory(this.file.getParent());
+                    }
+                    break;
                 case "h":
                     if (this.file.getParent() != null) {
                         this.changeDirectory(this.file.getParent());
