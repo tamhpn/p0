@@ -17,7 +17,15 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.8.1</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <mainClass>FileMan</mainClass>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
-</project> 
+</project>

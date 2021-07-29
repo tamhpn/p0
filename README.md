@@ -9,7 +9,7 @@ Compile:
 
 Run:
 
-`mvn exec:java -Dexec.mainClass="FileMan"`
+`mvn exec:java`
 
 will print the files and folders in the home directory ($HOME) to Standard Output.
 
