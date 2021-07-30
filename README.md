@@ -38,3 +38,4 @@ To clean up artifacts created by a maven build:
 - [ ] Unit tests
 - [ ] Logging
 - [ ] Cover edge causes causing program to crash
+- [ ] Implement a server to allow for (read-only) access
