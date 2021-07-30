@@ -18,7 +18,9 @@ public class FileMan {
     private void changeDirectory(String path) {
         this.file = new File(path);
         this.allSubFiles = this.file.listFiles();
-        this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(File[]::new);
+        this.visibleSubFiles = Arrays.stream(this.allSubFiles)
+                .filter(f -> !f.isHidden())
+                .toArray(File[]::new);
     }
 
     private void printFiles() {
@@ -44,7 +46,7 @@ public class FileMan {
                 changeDirectory(f.toString());
             }
         } else {
-            switch(input) {
+            switch (input) {
                 case ".":
                     this.showHidden = !this.showHidden;
                     break;
@@ -52,10 +54,6 @@ public class FileMan {
                     this.changeDirectory(System.getProperty("user.home"));
                     break;
                 case "b":
-                    if (this.file.getParent() != null) {
-                        this.changeDirectory(this.file.getParent());
-                    }
-                    break;
                 case "h":
                     if (this.file.getParent() != null) {
                         this.changeDirectory(this.file.getParent());
@@ -86,6 +84,6 @@ public class FileMan {
     }
 
     public static void main(String[] args) {
-       FileMan fm = new FileMan(System.getProperty("user.home"));
-   }
+        FileMan fm = new FileMan(System.getProperty("user.home"));
+    }
 }
