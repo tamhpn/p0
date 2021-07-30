@@ -1,7 +1,6 @@
 package com.github.tamhpn;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FileEnhanced extends File {
@@ -27,8 +26,6 @@ public class FileEnhanced extends File {
 
     public FileEnhanced[] listFiles() {
         File[] oldMethod = super.listFiles();
-        ArrayList<FileEnhanced> fileList = new ArrayList<>();
-        Arrays.stream(oldMethod).forEach(f -> fileList.add(new FileEnhanced(f.getAbsolutePath())));
-        return fileList.toArray(FileEnhanced[]::new);
+        return Arrays.stream(oldMethod).map(f -> new FileEnhanced(f.getAbsolutePath())).toArray(FileEnhanced[]::new);
     }
 }
