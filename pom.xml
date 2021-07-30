@@ -28,4 +28,12 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>io.javalin</groupId>
+            <artifactId>javalin</artifactId>
+            <version>3.13.10</version>
+        </dependency>
+    </dependencies>
 </project>

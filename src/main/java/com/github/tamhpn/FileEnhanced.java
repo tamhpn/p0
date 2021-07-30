@@ -25,7 +25,7 @@ public class FileEnhanced extends File {
     }
 
     public FileEnhanced[] listFiles() {
-        File[] oldMethod = super.listFiles();
-        return Arrays.stream(oldMethod).map(f -> new FileEnhanced(f.getAbsolutePath())).toArray(FileEnhanced[]::new);
+        File[] files = super.listFiles();
+        return Arrays.stream(files).map(f -> new FileEnhanced(f.getAbsolutePath())).toArray(FileEnhanced[]::new);
     }
 }

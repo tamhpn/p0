@@ -2,16 +2,19 @@ package com.github.tamhpn;
 
 import java.util.Scanner;
 import java.util.Arrays;
+import io.javalin.Javalin;
 
 public class FileMan {
     private FileEnhanced file;
     private FileEnhanced[] allSubFiles;
     private FileEnhanced[] visibleSubFiles;
     private boolean showHidden = false;
+    private Javalin javalin = Javalin.create();
 
     public FileMan(String path) {
-        this.changeDirectory(path);
-        this.run();
+        this.startServer();
+        // this.changeDirectory(path);
+        // this.run();
     }
 
     private void run() {
@@ -86,6 +89,29 @@ public class FileMan {
         } catch (NumberFormatException err) {
             return false;
         }
+    }
+
+    private void startServer() {
+        this.javalin.start(8080);
+        javalin.get("/*", ctx -> {
+            this.changeDirectory("/" + ctx.splat(0));
+            ctx.html(this.htmlContext());
+        });
+    }
+
+    private String htmlContext() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Current directory: " + this.file.getAbsolutePath());
+        sb.append("<br><br>");
+        for (FileEnhanced file : this.visibleSubFiles) {
+            sb.append("<a href='" + file.getAbsolutePath() + "'>" + file.getName()); // <a href='path'>name</a>
+            if (file.isDirectory()) {
+                sb.append("/");
+            }
+            sb.append("</a>");
+            sb.append("<br>");
+        }
+        return sb.toString();
     }
 
     public static void main(String[] args) {
