@@ -105,32 +105,46 @@ public class FileMan {
             }
         } else {
             switch (s) {
-            case ".":
+            case ".": // toggle whether hidden files are displayed
                 this.showHidden = !this.showHidden;
                 break;
-            case "~":
+            case "~": // move to home directory
                 this.changeDirectory(System.getProperty("user.home"));
                 break;
-            case "b":
-            case "h":
+            case "b": // move up to parent directory
+            case "p":
                 if (this.file.getParent() != null) {
                     this.changeDirectory(this.file.getParent());
                 }
                 break;
-            case "d":
+            case "c": // copy file to new directory
+                break;
+            case "d": // create new directory
                 System.out.print("Name of new directory: ");
                 String folderName = this.scan.nextLine();
                 this.createFolder(folderName);
                 this.refreshSubfilesList();
                 break;
-            case "f":
+            case "f": // create new file
                 System.out.print("Name of new file: ");
                 String fileName = this.scan.nextLine();
                 this.createFile(fileName);
                 this.refreshSubfilesList();
                 break;
-            case "q":
+            case "h": // display help
+                break;
+            case "m": // move file to new directory
+                break;
+            case "r": // rename file
+                break;
+            case "q": // quit
                 System.exit(0);
+            case "u": // unzip a zip archive
+                break;
+            case "x": // delete file WARNING DELETION IS PERMANENT
+                break;
+            case "z": // zip a file to an archive
+                break;
             default:
                 break;
             }

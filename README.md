@@ -16,9 +16,17 @@ will print the files and folders in the home directory ($HOME) to Standard Outpu
 The program will then wait for user input:
 - `.` will toggle hidden folder view
 - `~` will move to the user's home directory
-- `b` or `h` will move to the parent directory
-- `n` will prompt the user for a name and create a new directory with the inputted name
+- `b` or `p` will move to the parent directory
+- `c` will copy a file to another directory (TODO)
+- `d` will create a new directory with the given name
+- `f` will create a new file with the given name
+- `h` will display these tips (TODO)
+- `m` will move a file to another directory (TODO)
 - `q` will end the program
+- `r` will rename a file (TODO)
+- `u` will unzip a zip archive (TODO)
+- `x` will PERMANENTLY delete a file WARNING (TODO)
+- `z` will zip files to a zip archive (TODO)
 - `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
 To clean up artifacts created by a maven build:
@@ -30,7 +38,7 @@ To clean up artifacts created by a maven build:
 - [x] Changing directories
 - [x] Creating files
 - [ ] Deleting files
-- [ ] Compressing files
+- [ ] Compressing and uncompressing files
 - [ ] Renaming files
 - [ ] Moving files
 - [ ] Copying files
