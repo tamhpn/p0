@@ -15,8 +15,9 @@ will print the files and folders in the home directory ($HOME) to Standard Outpu
 
 The program will then wait for user input:
 - `.` will toggle hidden folder view
-- `h` or `b` will move to the parent directory
 - `~` will move to the user's home directory
+- `b` or `h` will move to the parent directory
+- `n` will prompt the user for a name and create a new directory with the inputted name
 - `q` will end the program
 - `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
@@ -32,8 +33,7 @@ To clean up artifacts created by a maven build:
 - [ ] Moving files
 - [ ] Copying files
 - [ ] Deleting files
-- [ ] Creating files
-- [ ] Opening files
+- [x] Creating folders
 - [x] Displaying files in sorted order
 - [ ] Unit tests
 - [ ] Logging
