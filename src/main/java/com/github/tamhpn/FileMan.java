@@ -102,7 +102,12 @@ public class FileMan {
     private String htmlContext() {
         StringBuilder sb = new StringBuilder();
         sb.append("Current directory: " + this.file.getAbsolutePath());
-        sb.append("<br><br>");
+        sb.append("<br>");
+        if (!this.file.getAbsolutePath().equals("/")) {
+            sb.append("<a href='" + file.getParent() + "'>" + "<button>..</button>" + "</a>");
+            sb.append("<br>");
+        }
+        sb.append("<br>");
         for (FileEnhanced file : this.visibleSubFiles) {
             sb.append("<a href='" + file.getAbsolutePath() + "'>" + file.getName()); // <a href='path'>name</a>
             if (file.isDirectory()) {
