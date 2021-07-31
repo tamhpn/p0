@@ -28,11 +28,12 @@ To clean up artifacts created by a maven build:
 ## Todo
 - [x] Toggling hidden files
 - [x] Changing directories
+- [x] Creating files
+- [ ] Deleting files
 - [ ] Compressing files
 - [ ] Renaming files
 - [ ] Moving files
 - [ ] Copying files
-- [ ] Deleting files
 - [x] Creating folders
 - [x] Displaying files in sorted order
 - [ ] Unit tests

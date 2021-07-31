@@ -117,10 +117,16 @@ public class FileMan {
                     this.changeDirectory(this.file.getParent());
                 }
                 break;
-            case "n":
-                System.out.print("Name of new folder: ");
+            case "d":
+                System.out.print("Name of new directory: ");
                 String folderName = this.scan.nextLine();
                 this.createFolder(folderName);
+                this.refreshSubfilesList();
+                break;
+            case "f":
+                System.out.print("Name of new file: ");
+                String fileName = this.scan.nextLine();
+                this.createFile(fileName);
                 this.refreshSubfilesList();
                 break;
             case "q":
@@ -137,6 +143,14 @@ public class FileMan {
             return true;
         } catch (NumberFormatException err) {
             return false;
+        }
+    }
+
+    private void createFile(String fileName) {
+        try {
+            Files.createFile(Paths.get(this.file.getAbsolutePath() + "/" + fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
