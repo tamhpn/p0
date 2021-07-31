@@ -14,8 +14,8 @@ public class FileMan {
     private Javalin javalin = Javalin.create();
 
     public FileMan(String path) {
+        this.changeDirectory(path);
         this.startServer();
-        // this.changeDirectory(path);
         // this.run();
     }
 
@@ -99,6 +99,9 @@ public class FileMan {
         this.javalin.start(8080);
         javalin.get("/*", ctx -> {
             String path = "/" + ctx.splat(0);
+            if (path.equals("/~")) {
+                path = System.getProperty("user.home");
+            }
             this.changeDirectory(path);
             ctx.html(this.htmlContext());
         });
