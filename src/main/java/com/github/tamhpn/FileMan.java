@@ -1,6 +1,8 @@
 package com.github.tamhpn;
 
 import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import io.javalin.Javalin;
 
@@ -25,10 +27,12 @@ public class FileMan {
     }
 
     private void changeDirectory(String path) {
-        this.file = new FileEnhanced(path);
-        this.allSubFiles = this.file.listFiles();
-        Arrays.sort(this.allSubFiles);
-        this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(FileEnhanced[]::new);
+        if (Files.isDirectory(Paths.get(path))) {
+            this.file = new FileEnhanced(path);
+            this.allSubFiles = this.file.listFiles();
+            Arrays.sort(this.allSubFiles);
+            this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(FileEnhanced[]::new);
+        }
     }
 
     private void displayFiles() {
@@ -94,7 +98,8 @@ public class FileMan {
     private void startServer() {
         this.javalin.start(8080);
         javalin.get("/*", ctx -> {
-            this.changeDirectory("/" + ctx.splat(0));
+            String path = "/" + ctx.splat(0);
+            this.changeDirectory(path);
             ctx.html(this.htmlContext());
         });
     }
