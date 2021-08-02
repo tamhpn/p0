@@ -75,6 +75,7 @@ public class FileMan {
             this.allSubFiles = this.file.listFiles();
             Arrays.sort(this.allSubFiles);
             this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(FileEnhanced[]::new);
+            this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
     }
 
     private void displayFiles() {
@@ -100,9 +101,11 @@ public class FileMan {
 
     private void parseInput(String s) {
         if (isInteger(s)) {
-            FileEnhanced newFile = this.filesToDisplay[Integer.parseInt(s)];
-            if (newFile.isDirectory()) {
+            try {
+                FileEnhanced newFile = this.filesToDisplay[Integer.parseInt(s)];
                 changeDirectory(newFile.toString());
+            } catch (ArrayIndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         } else {
             switch (s) {
