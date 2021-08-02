@@ -41,7 +41,7 @@ To clean up artifacts created by a maven build:
 - [ ] Compressing and uncompressing files
 - [x] Renaming files
 - [x] Moving files
-- [ ] Copying files
+- [x] Copying files
 - [x] Creating folders
 - [x] Displaying files in sorted order
 - [ ] Unit tests
