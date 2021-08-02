@@ -21,7 +21,7 @@ The program will then wait for user input:
 - `d` will create a new directory with the given name
 - `f` will create a new file with the given name
 - `h` will display these tips (TODO)
-- `m` will move a file to another directory (TODO)
+- `m` will move a file to another directory
 - `q` will end the program
 - `r` will rename a file
 - `u` will unzip a zip archive (TODO)
@@ -40,7 +40,7 @@ To clean up artifacts created by a maven build:
 - [ ] Deleting files
 - [ ] Compressing and uncompressing files
 - [x] Renaming files
-- [ ] Moving files
+- [x] Moving files
 - [ ] Copying files
 - [x] Creating folders
 - [x] Displaying files in sorted order

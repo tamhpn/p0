@@ -141,6 +141,7 @@ public class FileMan {
                 break;
             case "m": // move file to new directory
             case "move":
+                this.moveFile();
                 break;
             case "r": // rename file
             case "rename":
@@ -166,7 +167,7 @@ public class FileMan {
 
     private void toggleHidden() {
         this.showHidden = !this.showHidden;
-        this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
+        this.refreshSubfilesList();
     }
 
     private boolean isInteger(String s) {
@@ -223,6 +224,42 @@ public class FileMan {
                 this.refreshSubfilesList();
             }
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void moveFile() {
+        try {
+            System.out.println("Select a file to move [0 - " + (this.filesToDisplay.length - 1) + "], or enter q to exit: ");
+            String index = this.scan.nextLine();
+            if (index.equals("q")) {
+                return;
+            }
+            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
+            System.out.println("File selected: " + currentName);
+            
+            System.out.println("Select a folder to move to [0...] (or q to exit): ");
+            String directory = this.scan.nextLine();
+            if (directory.equals("q")) {
+                return;
+            }
+            directory = this.filesToDisplay[Integer.parseInt(directory)].getName();
+
+            System.out.println(currentName + " will be moved to " + directory + ". Confirm?");
+            String s = this.scan.nextLine();
+            if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
+                Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + directory + "/" + currentName));
+                this.refreshSubfilesList();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
             e.printStackTrace();
         }
     }
