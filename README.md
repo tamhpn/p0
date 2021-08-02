@@ -23,7 +23,7 @@ The program will then wait for user input:
 - `h` will display these tips (TODO)
 - `m` will move a file to another directory (TODO)
 - `q` will end the program
-- `r` will rename a file (TODO)
+- `r` will rename a file
 - `u` will unzip a zip archive (TODO)
 - `x` will PERMANENTLY delete a file WARNING (TODO)
 - `z` will zip files to a zip archive (TODO)
@@ -39,7 +39,7 @@ To clean up artifacts created by a maven build:
 - [x] Creating files
 - [ ] Deleting files
 - [ ] Compressing and uncompressing files
-- [ ] Renaming files
+- [x] Renaming files
 - [ ] Moving files
 - [ ] Copying files
 - [x] Creating folders
