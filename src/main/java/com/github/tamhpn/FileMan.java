@@ -103,46 +103,60 @@ public class FileMan {
         if (isInteger(s)) {
             try {
                 FileEnhanced newFile = this.filesToDisplay[Integer.parseInt(s)];
-                changeDirectory(newFile.toString());
+                this.changeDirectory(newFile.toString());
             } catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
         } else {
             switch (s) {
             case ".": // toggle whether hidden files are displayed
+            case "hidden":
                 this.toggleHidden();
                 break;
             case "~": // move to home directory
+            case "home":
                 this.changeDirectory(System.getProperty("user.home"));
                 break;
             case "b": // move up to parent directory
+            case "back":
             case "p":
+            case "parent":
                 if (this.file.getParent() != null) {
                     this.changeDirectory(this.file.getParent());
                 }
                 break;
             case "c": // copy file to new directory
+            case "copy":
                 break;
             case "d": // create new directory
+            case "directory":
                 this.createFolder();
                 break;
             case "f": // create new file
+            case "file":
                 this.createFile();
                 break;
             case "h": // display help
+            case "help":
                 break;
             case "m": // move file to new directory
+            case "move":
                 break;
             case "r": // rename file
+            case "rename":
                 this.renameFile();
                 break;
             case "q": // quit
+            case "quit":
                 System.exit(0);
             case "u": // unzip a zip archive
+            case "unzip":
                 break;
             case "x": // delete file WARNING DELETION IS PERMANENT
+            case "delete":
                 break;
             case "z": // zip a file to an archive
+            case "zip":
                 break;
             default:
                 break;
