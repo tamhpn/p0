@@ -202,14 +202,26 @@ public class FileMan {
 
     private void renameFile() {
         try {
-            System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "]: ");
+            System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "], or enter q to exit: ");
             String index = this.scan.nextLine();
+            if (index.equals("q")) {
+                return;
+            }
             String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
+
             System.out.println("File selected: " + currentName);
-            System.out.println("Enter the new file name: ");
+            System.out.println("Name of new file (or q to exit): ");
             String newName = this.scan.nextLine();
-            Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + newName));
-            this.refreshSubfilesList();
+            if (newName.equals("q")) {
+                return;
+            }
+
+            System.out.println(currentName + " will be renamed to " + newName + ". Confirm?");
+            String s = this.scan.nextLine();
+            if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
+                Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + newName));
+                this.refreshSubfilesList();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
