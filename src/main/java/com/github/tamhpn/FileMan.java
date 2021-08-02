@@ -11,6 +11,7 @@ public class FileMan {
     private FileEnhanced file;
     private FileEnhanced[] allSubFiles;
     private FileEnhanced[] visibleSubFiles;
+    private FileEnhanced[] filesToDisplay;
     private boolean showHidden = false;
     private Javalin javalin = Javalin.create();
     private Scanner scan;
@@ -18,6 +19,7 @@ public class FileMan {
     public FileMan(String path) {
         this.scan = new Scanner(System.in);
         this.changeDirectory(path);
+        this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
         // this.startServer();
         this.runInTerminal();
     }
@@ -51,7 +53,7 @@ public class FileMan {
             sb.append("<br>");
         }
         sb.append("<br>");
-        for (FileEnhanced file : this.visibleSubFiles) {
+        for (FileEnhanced file : this.filesToDisplay) {
             sb.append("<a href='" + file.getAbsolutePath() + "'>" + file.getName());
             if (file.isDirectory()) {
                 sb.append("/");
@@ -78,7 +80,6 @@ public class FileMan {
     private void displayFiles() {
         System.out.print("\033[H\033[2J");
         int index = 0;
-        FileEnhanced[] filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
         for (FileEnhanced file : filesToDisplay) {
             this.printFile(file, index++);
         }
@@ -99,7 +100,7 @@ public class FileMan {
 
     private void parseInput(String s) {
         if (isInteger(s)) {
-            FileEnhanced newFile = showHidden ? this.allSubFiles[Integer.parseInt(s)] : this.visibleSubFiles[Integer.parseInt(s)];
+            FileEnhanced newFile = this.filesToDisplay[Integer.parseInt(s)];
             if (newFile.isDirectory()) {
                 changeDirectory(newFile.toString());
             }
@@ -107,6 +108,7 @@ public class FileMan {
             switch (s) {
             case ".": // toggle whether hidden files are displayed
                 this.showHidden = !this.showHidden;
+                this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
                 break;
             case "~": // move to home directory
                 this.changeDirectory(System.getProperty("user.home"));
@@ -136,6 +138,7 @@ public class FileMan {
             case "m": // move file to new directory
                 break;
             case "r": // rename file
+                this.renameFile();
                 break;
             case "q": // quit
                 System.exit(0);
@@ -174,6 +177,22 @@ public class FileMan {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void renameFile() {
+        System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "]: ");
+        String index = this.scan.nextLine();
+        String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
+        System.out.println("File selected: " + currentName);
+        System.out.println("Enter the new file name: ");
+        String newName = this.scan.nextLine();
+        try {
+            Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + newName));
+            this.refreshSubfilesList();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.refreshSubfilesList();
     }
 
     public static void main(String[] args) {
