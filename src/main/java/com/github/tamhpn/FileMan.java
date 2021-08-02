@@ -1,25 +1,20 @@
 package com.github.tamhpn;
 
 import java.util.Scanner;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
+
+import com.github.tamhpn.lib.SuperFile;
+import com.github.tamhpn.util.SuperFiles;
+
 import io.javalin.Javalin;
 
 public class FileMan {
-    private FileEnhanced file;
-    private FileEnhanced[] allSubFiles;
-    private FileEnhanced[] visibleSubFiles;
-    private FileEnhanced[] filesToDisplay;
-    private boolean showHidden = false;
-    private Javalin javalin = Javalin.create();
+    private SuperFile file;
     private Scanner scan;
+    private Javalin javalin = Javalin.create();
 
     public FileMan(String path) {
+        this.file = SuperFiles.changeDirectory(this.file, path);
         this.scan = new Scanner(System.in);
-        this.changeDirectory(path);
-        this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
         // this.startServer();
         this.runInTerminal();
     }
@@ -38,7 +33,8 @@ public class FileMan {
             if (path.equals("/~")) {
                 path = System.getProperty("user.home");
             }
-            this.changeDirectory(path);
+            this.file = SuperFiles.changeDirectory(this.file, path);
+            this.file.refreshFileList();
             ctx.html(this.htmlContext());
         });
     }
@@ -53,7 +49,7 @@ public class FileMan {
             sb.append("<br>");
         }
         sb.append("<br>");
-        for (FileEnhanced file : this.filesToDisplay) {
+        for (SuperFile file : this.file.getDisplayedFiles()) {
             sb.append("<a href='" + file.getAbsolutePath() + "'>" + file.getName());
             if (file.isDirectory()) {
                 sb.append("/");
@@ -64,29 +60,15 @@ public class FileMan {
         return sb.toString();
     }
 
-    private void changeDirectory(String path) {
-        if (Files.isDirectory(Paths.get(path))) {
-            this.file = new FileEnhanced(path);
-            this.refreshSubfilesList();
-        }
-    }
-
-    private void refreshSubfilesList() {
-            this.allSubFiles = this.file.listFiles();
-            Arrays.sort(this.allSubFiles);
-            this.visibleSubFiles = Arrays.stream(this.allSubFiles).filter(f -> !f.isHidden()).toArray(FileEnhanced[]::new);
-            this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
-    }
-
     private void displayFiles() {
         System.out.print("\033[H\033[2J");
         int index = 0;
-        for (FileEnhanced file : filesToDisplay) {
+        for (SuperFile file : this.file.getDisplayedFiles()) {
             this.printFile(file, index++);
         }
     }
 
-    private void printFile(FileEnhanced file, int index) {
+    private void printFile(SuperFile file, int index) {
         System.out.print(index + ". " + file.getName());
         if (file.isDirectory()) {
             System.out.print("/");
@@ -102,8 +84,9 @@ public class FileMan {
     private void parseInput(String s) {
         if (isInteger(s)) {
             try {
-                FileEnhanced newFile = this.filesToDisplay[Integer.parseInt(s)];
-                this.changeDirectory(newFile.toString());
+                SuperFile newFile = this.file.getDisplayedFiles()[Integer.parseInt(s)];
+                this.file = SuperFiles.changeDirectory(this.file, newFile.toString());
+                this.file.refreshFileList();
             } catch (ArrayIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -111,42 +94,43 @@ public class FileMan {
             switch (s) {
             case ".": // toggle whether hidden files are displayed
             case "hidden":
-                this.toggleHidden();
+                this.file.toggleHidden();
+                this.file.refreshFileList();
                 break;
             case "~": // move to home directory
             case "home":
-                this.changeDirectory(System.getProperty("user.home"));
+                this.file = SuperFiles.changeDirectory(this.file, System.getProperty("user.home"));
                 break;
             case "b": // move up to parent directory
             case "back":
             case "p":
             case "parent":
                 if (this.file.getParent() != null) {
-                    this.changeDirectory(this.file.getParent());
+                    this.file = SuperFiles.changeDirectory(this.file, this.file.getParent());
                 }
                 break;
             case "c": // copy file to new directory
             case "copy":
-                this.copy();
+                SuperFiles.copy(this.file);
                 break;
             case "d": // create new directory
             case "directory":
-                this.createFolder();
+                SuperFiles.createFolder(this.file);
                 break;
             case "f": // create new file
             case "file":
-                this.createFile();
+                SuperFiles.createFile(this.file);
                 break;
             case "h": // display help
             case "help":
                 break;
             case "m": // move file to new directory
             case "move":
-                this.move();
+                SuperFiles.move(file);
                 break;
             case "r": // rename file
             case "rename":
-                this.rename();
+                SuperFiles.rename(this.file);
                 break;
             case "q": // quit
             case "quit":
@@ -156,7 +140,7 @@ public class FileMan {
                 break;
             case "x": // delete file WARNING DELETION IS PERMANENT
             case "delete":
-                this.delete();
+                SuperFiles.delete(this.file);
                 break;
             case "z": // zip a file to an archive
             case "zip":
@@ -167,166 +151,12 @@ public class FileMan {
         }
     }
 
-    private void toggleHidden() {
-        this.showHidden = !this.showHidden;
-        this.refreshSubfilesList();
-    }
-
     private boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
             return true;
         } catch (NumberFormatException err) {
             return false;
-        }
-    }
-
-    private void createFile() {
-        try {
-            System.out.print("Name of new file: ");
-            String fileName = this.scan.nextLine();
-            Files.createFile(Paths.get(this.file.getAbsolutePath() + "/" + fileName));
-            this.refreshSubfilesList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void createFolder() {
-        try {
-            System.out.print("Name of new directory: ");
-            String folderName = this.scan.nextLine();
-            Files.createDirectory(Paths.get(this.file.getAbsolutePath() + "/" + folderName));
-            this.refreshSubfilesList();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void rename() {
-        try {
-            System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
-            String index = this.scan.nextLine();
-            if (index.equals("q")) {
-                return;
-            }
-            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
-
-            System.out.println("File selected: " + currentName);
-            System.out.println("Name of new file (or q to exit): ");
-            String newName = this.scan.nextLine();
-            if (newName.equals("q")) {
-                return;
-            }
-
-            System.out.println(currentName + " will be renamed to " + newName + ". Confirm?");
-            String s = this.scan.nextLine();
-            if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
-                Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + newName));
-                this.refreshSubfilesList();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void move() {
-        try {
-            System.out.println("Select a file to move [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
-            String index = this.scan.nextLine();
-            if (index.equals("q")) {
-                return;
-            }
-            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
-            System.out.println("File selected: " + currentName);
-            
-            System.out.println("Select a folder to move to [0...] (or q to exit): ");
-            String directory = this.scan.nextLine();
-            if (directory.equals("q")) {
-                return;
-            }
-            directory = this.filesToDisplay[Integer.parseInt(directory)].getName();
-
-            System.out.println(currentName + " will be moved to " + directory + "/. Confirm?");
-            String s = this.scan.nextLine();
-            if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
-                Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + directory + "/" + currentName));
-                this.refreshSubfilesList();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void copy() {
-        try {
-            System.out.println("Select a file to copy [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
-            String index = this.scan.nextLine();
-            if (index.equals("q")) {
-                return;
-            }
-            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
-            System.out.println("File selected: " + currentName);
-            
-            System.out.println("Select a folder to copy to [0...] (or q to exit): "); // TODO: "." for current directory
-            String directory = this.scan.nextLine();
-            if (directory.equals("q")) {
-                return;
-            }
-            directory = this.filesToDisplay[Integer.parseInt(directory)].getName();
-
-            System.out.println("Enter a new file name (or input <Enter> key to skip, or q to exit): ");
-            String newName = scan.nextLine();
-            if (newName.equals("q")) {
-                return;
-            } else if (newName.equals("")) {
-                newName = currentName;
-            }
-
-            System.out.println(currentName + " will be copied to " + directory + "/" + newName + ". Confirm?");
-            String s = this.scan.nextLine();
-            if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
-                Files.copy(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + directory + "/" + newName));
-                this.refreshSubfilesList();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void delete() {
-        try {
-            System.out.println("Select a file to delete [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
-            String index = this.scan.nextLine();
-            if (index.equals("q")) {
-                return;
-            }
-            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
-
-            System.out.println(currentName + " will be deleted. WARNING: This is a permanent operation. Please input the filename to confirm.");
-            String s = this.scan.nextLine();
-            if (currentName.equals(s)) {
-                Files.deleteIfExists(Paths.get(this.file.getAbsolutePath() + "/" + currentName));
-                this.refreshSubfilesList();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
         }
     }
 
