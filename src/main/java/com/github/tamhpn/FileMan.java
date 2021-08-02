@@ -127,7 +127,7 @@ public class FileMan {
                 break;
             case "c": // copy file to new directory
             case "copy":
-                this.copyFile();
+                this.copy();
                 break;
             case "d": // create new directory
             case "directory":
@@ -142,11 +142,11 @@ public class FileMan {
                 break;
             case "m": // move file to new directory
             case "move":
-                this.moveFile();
+                this.move();
                 break;
             case "r": // rename file
             case "rename":
-                this.renameFile();
+                this.rename();
                 break;
             case "q": // quit
             case "quit":
@@ -202,7 +202,7 @@ public class FileMan {
         }
     }
 
-    private void renameFile() {
+    private void rename() {
         try {
             System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
             String index = this.scan.nextLine();
@@ -233,7 +233,7 @@ public class FileMan {
         }
     }
 
-    private void moveFile() {
+    private void move() {
         try {
             System.out.println("Select a file to move [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
             String index = this.scan.nextLine();
@@ -265,7 +265,7 @@ public class FileMan {
         }
     }
 
-    private void copyFile() {
+    private void copy() {
         try {
             System.out.println("Select a file to copy [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
             String index = this.scan.nextLine();
