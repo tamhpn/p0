@@ -17,7 +17,7 @@ The program will then wait for user input:
 - `.` will toggle hidden folder view
 - `~` will move to the user's home directory
 - `b` or `p` will move to the parent directory
-- `c` will copy a file to another directory (TODO)
+- `c` will copy a file to another directory
 - `d` will create a new directory with the given name
 - `f` will create a new file with the given name
 - `h` will display these tips (TODO)
