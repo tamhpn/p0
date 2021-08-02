@@ -107,8 +107,7 @@ public class FileMan {
         } else {
             switch (s) {
             case ".": // toggle whether hidden files are displayed
-                this.showHidden = !this.showHidden;
-                this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
+                this.toggleHidden();
                 break;
             case "~": // move to home directory
                 this.changeDirectory(System.getProperty("user.home"));
@@ -122,16 +121,10 @@ public class FileMan {
             case "c": // copy file to new directory
                 break;
             case "d": // create new directory
-                System.out.print("Name of new directory: ");
-                String folderName = this.scan.nextLine();
-                this.createFolder(folderName);
-                this.refreshSubfilesList();
+                this.createFolder();
                 break;
             case "f": // create new file
-                System.out.print("Name of new file: ");
-                String fileName = this.scan.nextLine();
-                this.createFile(fileName);
-                this.refreshSubfilesList();
+                this.createFile();
                 break;
             case "h": // display help
                 break;
@@ -154,6 +147,11 @@ public class FileMan {
         }
     }
 
+    private void toggleHidden() {
+        this.showHidden = !this.showHidden;
+        this.filesToDisplay = showHidden ? this.allSubFiles : this.visibleSubFiles;
+    }
+
     private boolean isInteger(String s) {
         try {
             Integer.parseInt(s);
@@ -163,36 +161,41 @@ public class FileMan {
         }
     }
 
-    private void createFile(String fileName) {
+    private void createFile() {
         try {
+            System.out.print("Name of new file: ");
+            String fileName = this.scan.nextLine();
             Files.createFile(Paths.get(this.file.getAbsolutePath() + "/" + fileName));
+            this.refreshSubfilesList();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void createFolder(String folderName) {
+    private void createFolder() {
         try {
+            System.out.print("Name of new directory: ");
+            String folderName = this.scan.nextLine();
             Files.createDirectory(Paths.get(this.file.getAbsolutePath() + "/" + folderName));
+            this.refreshSubfilesList();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void renameFile() {
-        System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "]: ");
-        String index = this.scan.nextLine();
-        String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
-        System.out.println("File selected: " + currentName);
-        System.out.println("Enter the new file name: ");
-        String newName = this.scan.nextLine();
         try {
+            System.out.println("Select a file to rename [0 - " + (this.filesToDisplay.length - 1) + "]: ");
+            String index = this.scan.nextLine();
+            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
+            System.out.println("File selected: " + currentName);
+            System.out.println("Enter the new file name: ");
+            String newName = this.scan.nextLine();
             Files.move(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + newName));
             this.refreshSubfilesList();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.refreshSubfilesList();
     }
 
     public static void main(String[] args) {
