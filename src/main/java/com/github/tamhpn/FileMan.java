@@ -156,6 +156,7 @@ public class FileMan {
                 break;
             case "x": // delete file WARNING DELETION IS PERMANENT
             case "delete":
+                this.delete();
                 break;
             case "z": // zip a file to an archive
             case "zip":
@@ -294,6 +295,30 @@ public class FileMan {
             String s = this.scan.nextLine();
             if (s.toLowerCase().equals("y") || s.toLowerCase().equals("yes") || s.equals("")) {
                 Files.copy(Paths.get(this.file.getAbsolutePath() + "/" + currentName), Paths.get(this.file.getAbsolutePath() + "/" + directory + "/" + newName));
+                this.refreshSubfilesList();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void delete() {
+        try {
+            System.out.println("Select a file to delete [0 - " + (this.filesToDisplay.length - 1) + "], or input q to exit: ");
+            String index = this.scan.nextLine();
+            if (index.equals("q")) {
+                return;
+            }
+            String currentName = this.filesToDisplay[Integer.parseInt(index)].getName();
+
+            System.out.println(currentName + " will be deleted. WARNING: This is a permanent operation. Please input the filename to confirm.");
+            String s = this.scan.nextLine();
+            if (currentName.equals(s)) {
+                Files.deleteIfExists(Paths.get(this.file.getAbsolutePath() + "/" + currentName));
                 this.refreshSubfilesList();
             }
         } catch (IOException e) {

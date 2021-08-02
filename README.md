@@ -25,7 +25,7 @@ The program will then wait for user input:
 - `q` will end the program
 - `r` will rename a file
 - `u` will unzip a zip archive (TODO)
-- `x` will PERMANENTLY delete a file WARNING (TODO)
+- `x` will WARNING: PERMANENTLY delete a file
 - `z` will zip files to a zip archive (TODO)
 - `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
@@ -37,7 +37,7 @@ To clean up artifacts created by a maven build:
 - [x] Toggling hidden files
 - [x] Changing directories
 - [x] Creating files
-- [ ] Deleting files
+- [x] Deleting files
 - [ ] Compressing and uncompressing files
 - [x] Renaming files
 - [x] Moving files
