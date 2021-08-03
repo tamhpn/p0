@@ -13,7 +13,7 @@ Run:
 
 will print the files and folders in the home directory ($HOME) to Standard Output.
 
-The program will then wait for user input:
+The user can then input a command:
 - `.` will toggle hidden folder view
 - `~` will move to the user's home directory
 - `b` or `p` will move to the parent directory
@@ -46,5 +46,5 @@ To clean up artifacts created by a maven build:
 - [x] Displaying files in sorted order
 - [ ] Unit tests
 - [ ] Logging
-- [ ] Cover edge causes causing program to crash
 - [x] Implement a server to allow for (read-only) access
+- [ ] Cover edge causes causing program to crash

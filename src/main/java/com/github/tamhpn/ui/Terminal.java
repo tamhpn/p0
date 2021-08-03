@@ -21,6 +21,22 @@ public class Terminal implements Startable {
         }
     }
 
+    private void displayFiles() {
+        System.out.print("\033[H\033[2J");
+        int index = 0;
+        for (SuperFile file : this.file.getDisplayedFiles()) {
+            this.printFile(file, index++);
+        }
+    }
+
+    private void printFile(SuperFile file, int index) {
+        System.out.print(index + ". " + file.getName());
+        if (file.isDirectory()) {
+            System.out.print("/");
+        }
+        System.out.println();
+    }
+
     private void getUserInput() {
         String input = scan.nextLine();
         this.parseInput(input);
@@ -93,22 +109,6 @@ public class Terminal implements Startable {
                 break;
             }
         }
-    }
-
-    private void displayFiles() {
-        System.out.print("\033[H\033[2J");
-        int index = 0;
-        for (SuperFile file : this.file.getDisplayedFiles()) {
-            this.printFile(file, index++);
-        }
-    }
-
-    private void printFile(SuperFile file, int index) {
-        System.out.print(index + ". " + file.getName());
-        if (file.isDirectory()) {
-            System.out.print("/");
-        }
-        System.out.println();
     }
 
     private boolean isInteger(String s) {
