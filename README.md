@@ -29,7 +29,7 @@ The user can then input a command:
 - `z` will zip files to a zip archive (TODO)
 - `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
-An optional command line argument can be given to view a user's directories on a web server at http://localhost:8080
+An optional command line argument can be given to view (READ-ONLY) a user's directories on a web server at http://localhost:8080
 
 `mvn exec:java -Dexec.args=-s`
 
