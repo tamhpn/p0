@@ -29,6 +29,10 @@ The user can then input a command:
 - `z` will zip files to a zip archive (TODO)
 - `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
 
+An optional command line argument can be given to view a user's directories on a web server at http://localhost:8080
+
+`mvn exec:java -Dexec.args=-s`
+
 To clean up artifacts created by a maven build:
 
 `mvn clean`
@@ -44,7 +48,7 @@ To clean up artifacts created by a maven build:
 - [x] Copying files
 - [x] Creating folders
 - [x] Displaying files in sorted order
+- [x] Implement a server to allow for (read-only) access
 - [ ] Unit tests
 - [ ] Logging
-- [x] Implement a server to allow for (read-only) access
 - [ ] Cover edge causes causing program to crash
