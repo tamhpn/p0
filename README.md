@@ -14,20 +14,20 @@ Run:
 will print the files and folders in the home directory ($HOME) to Standard Output.
 
 The user can then input a command:
-- `.` will toggle hidden folder view
+- `.` will toggle hidden files
 - `~` will move to the user's home directory
 - `b` or `p` will move to the parent directory
 - `c` will copy a file to another directory
-- `d` will create a new directory with the given name
-- `f` will create a new file with the given name
-- `h` will display these tips (TODO)
+- `d` will create a new directory
+- `f` will create a new file
+- `h` will display these input commands
 - `m` will move a file to another directory
 - `q` will end the program
 - `r` will rename a file
 - `u` will unzip a zip archive (TODO)
 - `x` will WARNING: PERMANENTLY delete a file
 - `z` will zip files to a zip archive (TODO)
-- `1` will move to the subfolder at index 1 (or any number entered) given it is a folder
+- `1` will move to the subdirectory at index 1 (or any number entered) given it is a directory
 
 An optional command line argument can be given to view (READ-ONLY) a user's directories on a web server at http://localhost:8080
 
@@ -36,6 +36,9 @@ An optional command line argument can be given to view (READ-ONLY) a user's dire
 To clean up artifacts created by a maven build:
 
 `mvn clean`
+
+## Logs
+Log4j logs are saved to logs/fileman.log
 
 ## Todo
 - [x] Toggling hidden files
@@ -50,5 +53,5 @@ To clean up artifacts created by a maven build:
 - [x] Displaying files in sorted order
 - [x] Implement a server to allow for (read-only) access
 - [ ] Unit tests
-- [ ] Logging
+- [x] Logging
 - [ ] Cover edge causes causing program to crash

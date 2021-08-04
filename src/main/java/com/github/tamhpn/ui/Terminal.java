@@ -5,9 +5,13 @@ import java.util.Scanner;
 import com.github.tamhpn.lib.SuperFile;
 import com.github.tamhpn.util.SuperFiles;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Terminal implements Startable {
     private Scanner scan;
     private SuperFile file;
+    private static final Logger logger = LogManager.getLogger(Terminal.class);
 
     public Terminal(SuperFile file) {
         this.file = file;
@@ -15,6 +19,7 @@ public class Terminal implements Startable {
     }
 
     public void start() {
+        logger.info("Starting FileMan in terminal interface...");
         while (true) {
             this.displayFiles();
             this.getUserInput();
@@ -46,8 +51,10 @@ public class Terminal implements Startable {
         if (isInteger(s)) {
             try {
                 SuperFile newFile = this.file.getDisplayedFiles()[Integer.parseInt(s)];
+                logger.info("User selected " + newFile.getName());
                 this.file = SuperFiles.changeDirectory(this.file, newFile.toString());
             } catch (ArrayIndexOutOfBoundsException e) {
+                logger.error("User selected non-existing file; " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -61,7 +68,7 @@ public class Terminal implements Startable {
             case "home":
                 this.file = SuperFiles.changeDirectory(this.file, System.getProperty("user.home"));
                 break;
-            case "b": // move up to parent directory
+            case "b": // move to parent directory
             case "back":
             case "p":
             case "parent":
@@ -83,6 +90,7 @@ public class Terminal implements Startable {
                 break;
             case "h": // display help
             case "help":
+                this.printHelpMenu();
                 break;
             case "m": // move file to new directory
             case "move":
@@ -94,6 +102,7 @@ public class Terminal implements Startable {
                 break;
             case "q": // quit
             case "quit":
+            logger.info("Exiting FileMan...");
                 System.exit(0);
             case "u": // unzip a zip archive
             case "unzip":
@@ -118,5 +127,24 @@ public class Terminal implements Startable {
         } catch (NumberFormatException err) {
             return false;
         }
+    }
+
+    private void printHelpMenu() {
+        System.out.println("  `.` will toggle hidden files");
+        System.out.println("  `~` will move to the home directory");
+        System.out.println("  `b` or `p` will move to the parent directory");
+        System.out.println("  `c` will copy a file to another directory");
+        System.out.println("  `d` will create a new directory");
+        System.out.println("  `f` will create a new file");
+        System.out.println("  `h` will print this message");
+        System.out.println("  `m` will move a file to another directory");
+        System.out.println("  `q` will end the program");
+        System.out.println("  `r` will rename a file");
+        // System.out.println("  `u` will unzip a zip archive");
+        System.out.println("  `x` will WARNING: PERMANENTLY delete a file");
+        // System.out.println("  `z` will zip files to a zip archive");
+        System.out.println("  `1` will move to the subdirectory at index 1 given it is a directory");
+        System.out.println("Press any key to continue...");
+        scan.nextLine();
     }
 }
