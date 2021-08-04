@@ -6,3 +6,5 @@
 .vscode/
 file-man.iml
 target/
+logs/
+.factorypath

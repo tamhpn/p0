@@ -7,15 +7,21 @@ import java.util.Scanner;
 
 import com.github.tamhpn.lib.SuperFile;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class SuperFiles {
     public static Scanner scan = new Scanner(System.in);
+    private static final Logger logger = LogManager.getLogger(SuperFiles.class);
 
     public static SuperFile changeDirectory(SuperFile currentDirectory, String path) {
         if (Files.isDirectory(Paths.get(path))) {
+            logger.info("Changing directory to " + path + "/");
             SuperFile file = new SuperFile(path);
             file.refreshFileList();
             return file;
         }
+        logger.error("Unable to change directory to " + path + " from " + currentDirectory);
         return currentDirectory;
     }
 
@@ -23,9 +29,11 @@ public class SuperFiles {
         try {
             System.out.print("Name of new file: ");
             String fileName = scan.nextLine();
+            logger.info("Creating file '" + fileName + "' in " + file.getAbsolutePath() + "/");
             Files.createFile(Paths.get(file.getAbsolutePath() + "/" + fileName));
             file.refreshFileList();
         } catch (IOException e) {
+            logger.error("Unable to create file; " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -34,9 +42,11 @@ public class SuperFiles {
         try {
             System.out.print("Name of new directory: ");
             String folderName = scan.nextLine();
+            logger.info("Creating folder '" + folderName + "' in " + file.getAbsolutePath() + "/");
             Files.createDirectory(Paths.get(file.getAbsolutePath() + "/" + folderName));
             file.refreshFileList();
         } catch (IOException e) {
+            logger.error("Unable to create directory; " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -60,14 +70,12 @@ public class SuperFiles {
             System.out.println("'" + currentName + "' will be renamed to " + "'" + newName + "'" + ". Press <Enter> to confirm.");
             String s = scan.nextLine();
             if (s.equals("")) {
+                logger.info("Renaming " + currentName + " to " + newName);
                 Files.move(Paths.get(file.getAbsolutePath() + "/" + currentName), Paths.get(file.getAbsolutePath() + "/" + newName));
                 file.refreshFileList();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            logger.error("Unable to rename file; " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -92,15 +100,13 @@ public class SuperFiles {
             System.out.println("'" + currentName + "' will be moved to " + "'" + directory + "/'. Press <Enter> to confirm.");
             String s = scan.nextLine();
             if (s.equals("")) {
+                logger.info("Moving " + currentName + " to " + directory + "/");
                 Files.move(Paths.get(file.getAbsolutePath() + "/" + currentName),
                 Paths.get(file.getAbsolutePath() + "/" + directory + "/" + currentName));
                 file.refreshFileList();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            logger.error("Unable to move file; " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -133,14 +139,12 @@ public class SuperFiles {
             System.out.println("'" + currentName + "' will be copied to " + "'" + directory + "/" + newName + "'. Press <Enter> to confirm.");
             String s = scan.nextLine();
             if (s.equals("")) {
+                logger.info("Copying " + currentName + " to " + directory + "/" + newName);
                 Files.copy(Paths.get(file.getAbsolutePath() + "/" + currentName), Paths.get(file.getAbsolutePath() + "/" + directory + "/" + newName));
                 file.refreshFileList();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            logger.error("Unable to copy file; " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -157,14 +161,12 @@ public class SuperFiles {
             System.out.println("'" + currentName + "' will be deleted. WARNING: This is a permanent operation. \nPlease input the filename to confirm.");
             String s = scan.nextLine();
             if (currentName.equals(s)) {
+                logger.info("Deleting " + currentName);
                 Files.deleteIfExists(Paths.get(file.getAbsolutePath() + "/" + currentName));
                 file.refreshFileList();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (NumberFormatException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            logger.error("Unable to delete file; " + e.getMessage());
             e.printStackTrace();
         }
     }

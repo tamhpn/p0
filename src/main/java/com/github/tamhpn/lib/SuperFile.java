@@ -3,11 +3,16 @@ package com.github.tamhpn.lib;
 import java.io.File;
 import java.util.Arrays;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class SuperFile extends File {
     private SuperFile[] allSubfiles; // array of all files in a directory, including hidden files
     private SuperFile[] publicSubfiles; // array of only files visible by default (no hidden files)
     private SuperFile[] displayedFiles; // will point to either allSubfiles or publicSubfiles depending on boolean showHidden
     private boolean showHidden;
+
+    private static final Logger logger = LogManager.getLogger(SuperFile.class);
 
     public SuperFile(String pathname) {
         super(pathname);
@@ -29,6 +34,7 @@ public class SuperFile extends File {
         }
     }
 
+    @Override
     public SuperFile[] listFiles() {
         File[] files = super.listFiles();
         return Arrays.stream(files).map(f -> new SuperFile(f.getAbsolutePath())).toArray(SuperFile[]::new);
@@ -46,9 +52,11 @@ public class SuperFile extends File {
     }
 
     public void toggleHidden() {
+        if (this.showHidden) {
+            logger.info("Hidden files are no longer being displayed.");
+        } else {
+            logger.info("Hidden files are now being displayed.");
+        }
         this.showHidden = !this.showHidden;
-    }
-
-    public static void main(String[] args) {
     }
 }

@@ -5,9 +5,13 @@ import java.util.Scanner;
 import com.github.tamhpn.lib.SuperFile;
 import com.github.tamhpn.util.SuperFiles;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Terminal implements Startable {
     private Scanner scan;
     private SuperFile file;
+    private static final Logger logger = LogManager.getLogger(Terminal.class);
 
     public Terminal(SuperFile file) {
         this.file = file;
@@ -15,6 +19,7 @@ public class Terminal implements Startable {
     }
 
     public void start() {
+        logger.info("Starting FileMan in terminal interface...");
         while (true) {
             this.displayFiles();
             this.getUserInput();
@@ -46,8 +51,10 @@ public class Terminal implements Startable {
         if (isInteger(s)) {
             try {
                 SuperFile newFile = this.file.getDisplayedFiles()[Integer.parseInt(s)];
+                logger.info("User selected " + newFile.getName());
                 this.file = SuperFiles.changeDirectory(this.file, newFile.toString());
             } catch (ArrayIndexOutOfBoundsException e) {
+                logger.error("User selected non-existing file; " + e.getMessage());
                 e.printStackTrace();
             }
         } else {
@@ -95,6 +102,7 @@ public class Terminal implements Startable {
                 break;
             case "q": // quit
             case "quit":
+            logger.info("Exiting FileMan...");
                 System.exit(0);
             case "u": // unzip a zip archive
             case "unzip":

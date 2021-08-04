@@ -4,9 +4,14 @@ import io.javalin.Javalin;
 import com.github.tamhpn.lib.SuperFile;
 import com.github.tamhpn.util.SuperFiles;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class Server implements Startable {
     private Javalin javalin;
     private SuperFile file;
+
+    private static final Logger logger = LogManager.getLogger(Server.class);
 
     public Server(SuperFile file) {
         this.javalin = Javalin.create();
@@ -14,8 +19,10 @@ public class Server implements Startable {
     }
 
     public void start() {
+        logger.info("Starting Javalin server on port 8080.");
         this.javalin.start(8080);
         javalin.get("/*", ctx -> {
+            logger.info("Client made a request to http://localhost:8080/" + ctx.splat(0));
             String path = "/" + ctx.splat(0);
             if (path.equals("/~")) {
                 path = System.getProperty("user.home");
