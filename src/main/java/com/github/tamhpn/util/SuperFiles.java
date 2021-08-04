@@ -14,15 +14,15 @@ public class SuperFiles {
     public static Scanner scan = new Scanner(System.in);
     private static final Logger logger = LogManager.getLogger(SuperFiles.class);
 
-    public static SuperFile changeDirectory(SuperFile currentDirectory, String path) {
+    public static SuperFile changeDirectory(SuperFile file, String path) {
         if (Files.isDirectory(Paths.get(path))) {
             logger.info("Changing directory to " + path + "/");
-            SuperFile file = new SuperFile(path);
-            file.refreshFileList();
-            return file;
+            SuperFile newFile = new SuperFile(path);
+            newFile.refreshFileList();
+            return newFile;
         }
-        logger.error("Unable to change directory to " + path + " from " + currentDirectory);
-        return currentDirectory;
+        logger.error("Unable to change directory to " + path + " from " + file.getAbsolutePath());
+        return file;
     }
 
     public static void createFile(SuperFile file) {
