@@ -37,6 +37,9 @@ To clean up artifacts created by a maven build:
 
 `mvn clean`
 
+## Logs
+Log4j logs are saved to logs/fileman.log
+
 ## Todo
 - [x] Toggling hidden files
 - [x] Changing directories
@@ -50,5 +53,5 @@ To clean up artifacts created by a maven build:
 - [x] Displaying files in sorted order
 - [x] Implement a server to allow for (read-only) access
 - [ ] Unit tests
-- [ ] Logging
+- [x] Logging
 - [ ] Cover edge causes causing program to crash
