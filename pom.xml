@@ -18,6 +18,19 @@
                     <version>3.8.1</version>
                 </plugin>
                 <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <configuration>
+                        <archive>
+                        <manifest>
+                            <mainClass>com.github.tamhpn.FileMan</mainClass>
+                        </manifest>
+                        </archive>
+                        <descriptorRefs>
+                            <descriptorRef>jar-with-dependencies</descriptorRef>
+                        </descriptorRefs>
+                    </configuration>
+                </plugin>
+                <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>exec-maven-plugin</artifactId>
                     <version>3.0.0</version>
